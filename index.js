@@ -13,7 +13,7 @@ const questions = [
       {
         type: 'input',
         message: 'What is your email address?',
-        name: 'languages',
+        name: 'email',
       },
       {
         type: 'input',
@@ -54,24 +54,31 @@ const questions = [
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
-    
+    fs.writeFile(generateMarkdown())
 }
 
 // TODO: Create a function to initialize app
 function init() {
-    inquirer
-  .prompt(questions)
-  .then((response) => 
-    // Use user feedback for... whatever!!
-    fs.appendFile(
-        "READMEtest.md",
-`# ${response.project}
-## ${response.description}
+  inquirer
+    // Prompts questions in terminal
+    .prompt(questions)
+
+    // Awaits responses in terminal then calls writeFile
+    .then((response) => {
+
+    // deconstructs answers into variables
+    const { project, description } = response;
+
+    fs.writeFile(
+        "./new_README/README.md",
+`# ${project}
+## ${description}
 ## Table of Contents
 \n`, 
     (err) =>
         err ? console.error(err) : console.log('Generating README')
-    ))
+    )
+   })
 
   .catch((error) => {
     if (error.isTtyError) {
