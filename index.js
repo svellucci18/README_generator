@@ -26,8 +26,9 @@ const questions = [
         name: 'description',
       },
       {
-        type: 'input',
-        message: "What kind of license should your project have?",
+        type: 'checkbox',
+        message: "Please should one license your project should have?",
+        choices: ['MIT', 'ISC', 'Zlib'],
         name: 'license',
       },
       {
@@ -67,14 +68,43 @@ function init() {
     .then((response) => {
 
     // deconstructs answers into variables
-    const { project, description } = response;
+    const { username, email, project, description, license, install, tests, repoUseGuide, contributionGuide } = response;
 
     fs.writeFile(
         "./new_README/README.md",
 `# ${project}
-## ${description}
+[<img src="https://img.shields.io/badge/license-${license}-COLOR.svg?logo=LOGO">](<https://opensource.org/licenses/${license}>)
+
+## Description
+${description}
+
 ## Table of Contents
-\n`, 
+* [Installation](#installation)
+* [Usage](#usage)
+* [License](#license)
+* [Contributing](#contributing)
+* [Tests](#tests)
+* [Questions](#questions)
+
+## Installation
+${install}
+
+## Usage
+${repoUseGuide}
+
+## License
+This application is covered under the ${license} license.
+
+## Contributing
+${contributionGuide}
+
+## Tests
+In order to run tests, type ${tests} to command line.
+
+## Questions
+Contact me ${email}
+or [github](<https://github.com/${username}>)
+`, 
     (err) =>
         err ? console.error(err) : console.log('Generating README')
     )
