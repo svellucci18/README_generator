@@ -2,6 +2,7 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const generateMarkdown = require('./utils/generateMarkdown');
+const path = require('path');
 
 // TODO: Create an array of questions for user input
 const questions = [
@@ -55,7 +56,11 @@ const questions = [
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
-    fs.writeFile(generateMarkdown())
+
+  // file name and data
+  fs.writeFileSync(
+    path.join("new_README",fileName), data)
+
 }
 
 // TODO: Create a function to initialize app
@@ -66,57 +71,10 @@ function init() {
 
     // Awaits responses in terminal then calls writeFile
     .then((response) => {
+      writeToFile("README.md", generateMarkdown({...response})) // inquirer generates an object
 
-    // deconstructs answers into variables
-    const { username, email, project, description, license, install, tests, repoUseGuide, contributionGuide } = response;
-
-    fs.writeFile(
-        "./new_README/README.md",
-`# ${project}
-[<img src="https://img.shields.io/badge/license-${license}-COLOR.svg?logo=LOGO">](<https://opensource.org/licenses/${license}>)
-
-## Description
-${description}
-
-## Table of Contents
-* [Installation](#installation)
-* [Usage](#usage)
-* [License](#license)
-* [Contributing](#contributing)
-* [Tests](#tests)
-* [Questions](#questions)
-
-## Installation
-${install}
-
-## Usage
-${repoUseGuide}
-
-## License
-This application is covered under the ${license} license.
-
-## Contributing
-${contributionGuide}
-
-## Tests
-In order to run tests, type ${tests} to command line.
-
-## Questions
-Contact me ${email}
-or [github](<https://github.com/${username}>)
-`, 
-    (err) =>
-        err ? console.error(err) : console.log('Generating README')
-    )
    })
 
-  .catch((error) => {
-    if (error.isTtyError) {
-      // Prompt couldn't be rendered in the current environment
-    } else {
-      // Something else went wrong
-    }
-  });
 }
 
 // Function call to initialize app
